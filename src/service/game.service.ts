@@ -12,6 +12,7 @@ import { CompletedGameData, IncompleteGameData } from '../interfaces';
 import gameWon from '../util/gameWon';
 import { GameStatus } from '../types/GameStatus';
 import logger from '../util/logger';
+import { resolve } from 'path';
 
 export interface UpdateResultDoc {
   ok: number;
@@ -21,11 +22,31 @@ export interface UpdateResultDoc {
 
 export async function getIncompleteGames(
   userId: string
-): Promise<IncompleteGameData[]> {
+): Promise<GameDocument[]> {             // the full GameDocument gets returned from GameModel.find()
+// ): Promise<IncompleteGameData[]> {    // the gamehandler then creates & sends out an object equivalent to IncompleteGameData
   return await GameModel.find({
     userId: new mongoose.Types.ObjectId(userId),
     status: { $eq: 'ACTIVE' },
   }).lean();
+
+  //just experimenting below
+
+  // return GameModel.find({
+  //   userId: new mongoose.Types.ObjectId(userId),
+  //   status: { $eq: 'ACTIVE' },
+  // });
+  // return GameModel.find({
+  //   userId: new mongoose.Types.ObjectId(userId),
+  //   status: { $eq: 'ACTIVE' },
+  // }).then((result) => {return result})
+  // }).then((result) => {return Promise.resolve(result)}).catch(err => {return Promise.resolve([])});
+  // ^^^^ above all work ^^^^
+  
+  // VVV below works VVV
+  // return await Promise.resolve(GameModel.find({
+  //   userId: new mongoose.Types.ObjectId(userId),
+  //   status: { $eq: 'ACTIVE' },
+  // }).exec());
 }
 
 export async function getCompletedGames(
