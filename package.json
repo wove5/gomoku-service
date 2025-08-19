@@ -31,5 +31,7 @@
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.2.2"
   },
-  "resolutions": {}
+  "resolutions": {
+    "rimraf": "^4.0.0"
+  }
 }
